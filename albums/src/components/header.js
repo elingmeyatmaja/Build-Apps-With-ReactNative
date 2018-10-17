@@ -2,7 +2,7 @@
 import React  from 'react';
 import { Text, View } from 'react-native';
  
-// Make a component 
+// Make a component header
 const Header = (props) => {
     const { textStyle, viewStyle } = styles;
     
@@ -12,6 +12,7 @@ const Header = (props) => {
        </View>
     );
 };
+
 
 const styles = {
     viewStyle: {
