@@ -1,13 +1,51 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import { Header } from './components/common'; 
+import { View } from 'react-native';
+import firebase from '@firebase/app';
+import '@firebase/auth';
+import { Header, Button, Spinner } from './components/common'; 
+import LoginForm from './components/LoginForm';
 
 class App extends Component {
+    state = {  loggedIn: null};
+
+    componentWillMount() {
+        firebase.initializeApp({
+            apiKey: "AIzaSyBB7s7wmDK_pQ3g-rs2yuO9ZD5Wfqq6guE",
+            authDomain: "auth-react2018.firebaseapp.com",
+            databaseURL: "https://auth-react2018.firebaseio.com",
+            projectId: "auth-react2018",
+            storageBucket: "auth-react2018.appspot.com",
+            messagingSenderId: "1096936416761"
+        });
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if(user){
+                this.setState({ loggedIn: true});
+            } else {
+                this.setState({ loggedIn: false});
+            }
+        });
+    }
+
+    renderContent(){
+        switch (this.state.loggedIn) {
+            case true:
+                return (
+                    <Button onPress={() => firebase.auth().signOut()}>
+                        Log Out
+                    </Button>);
+            case false:
+                return <LoginForm />;
+            default:
+                return <Spinner size="large" />
+        }    
+    }
+
     render() {
         return (
             <View>
                 <Header headerText="Authentication" />
-                <Text>An App</Text>
+                {this.renderContent()}
             </View>
         );
     }
